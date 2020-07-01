@@ -1,4 +1,4 @@
-#include "PwmActuator.hpp"
+#include "PwmActuator.h"
 
 PwmActuator::PwmActuator(int clock_freq): clock_freq(clock_freq) {
 
