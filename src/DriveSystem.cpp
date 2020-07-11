@@ -2,7 +2,7 @@
 
 #define STD_SPEED 80
 
-DriveSystem::DriveSystem(PinName right_forward, PinName right_backward, PinName left_forward, PinName left_backward, int clock_freq)
+DriveSystem::DriveSystem(PinName left_forward, PinName left_backward, PinName right_forward, PinName right_backward, int clock_freq)
 : Right(right_forward, right_backward, clock_freq), Left(left_forward, left_backward, clock_freq) {
     this->speed = 0;
 }

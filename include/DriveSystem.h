@@ -11,7 +11,7 @@ private:
     int speed;
 
 public:
-    DriveSystem(PinName right_forward, PinName right_backward, PinName left_forward, PinName left_backward, int clock_freq);
+    DriveSystem(PinName left_forward, PinName left_backward, PinName right_forward, PinName right_backward, int clock_freq);
     virtual ~DriveSystem();
     void init();
     void update(int left_speed, int right_speed);
