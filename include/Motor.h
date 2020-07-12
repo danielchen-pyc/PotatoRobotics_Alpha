@@ -22,6 +22,7 @@ public:
     void update(int speed);
     void stop(int duration);
     void actuate();
+    int getSpeed();
 };
 
 #endif

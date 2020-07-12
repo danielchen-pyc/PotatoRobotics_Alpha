@@ -11,6 +11,10 @@ Motor::~Motor() {
 
 }
 
+int Motor::getSpeed() {
+    return this->speed;
+}
+
 void Motor::init() {
     this->speed = 0;
     this->isForward = true;

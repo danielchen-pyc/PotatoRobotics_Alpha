@@ -21,10 +21,10 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define MOTOR_RIGHT_FORWARD PA_1
 #define MOTOR_RIGHT_REVERSE PA_2
 
-#define RIGHT_TAPE_SENSOR PA5
-#define LEFT_TAPE_SENSOR PA4
-
-#define THRESHOLD_LIGHTVOLT 76
+#define RIGHT_TAPE_SENSOR PB0
+#define LEFT_TAPE_SENSOR PB1
+#define RIGHT_THRESHOLD_LIGHTVOLT 37
+#define LEFT_THRESHOLD_LIGHTVOLT 34.5
 
 bool found_tape;
 bool left_ontape;
@@ -32,7 +32,7 @@ bool left_prev;
 bool right_ontape;
 bool right_prev;
 
-#define ONTAPE_RECORD_NUM 10;
+#define ONTAPE_RECORD_NUM 10
 bool left_list[ONTAPE_RECORD_NUM];
 bool right_list[ONTAPE_RECORD_NUM];
 
@@ -60,11 +60,13 @@ void setup() {
   pwm_stop(MOTOR_RIGHT_FORWARD);
   pwm_stop(MOTOR_RIGHT_REVERSE);
 
+  // drivesystem.forward();
+
 
   // Set up Variables Here
   found_tape = false;
 
-  // Displays "Hello world!" on the screen
+  // Print SetUp Message
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
@@ -75,8 +77,8 @@ void setup() {
 }
 
 void loop() {
-  int lightvolt_left = analogRead(LEFT_TAPE_SENSOR);
-  int lightvolt_right = analogRead(RIGHT_TAPE_SENSOR);
+  double lightvolt_left = analogRead(LEFT_TAPE_SENSOR);
+  double lightvolt_right = analogRead(RIGHT_TAPE_SENSOR);
   display.clearDisplay();
   display.setCursor(0, 0);
   display.print(lightvolt_left);
@@ -85,12 +87,12 @@ void loop() {
 
   set_tape_state(lightvolt_left, lightvolt_right);
   
-  if (!foundtape && (left_ontape || right_ontape)) {
+  if (!found_tape && (left_ontape || right_ontape)) {
     found_tape = true;
   }
   
   if (!found_tape) {
-    drivesystem.forward();
+    drivesystem.forward_med();
   } else {
     for (int k = ONTAPE_RECORD_NUM - 1; k >= 1; k--) {
       left_list[k] = left_list[k-1];
@@ -98,30 +100,35 @@ void loop() {
     }
     left_list[0] = left_ontape;
     right_list[0] = right_ontape;
+    int leftSpeed = drivesystem.getLeftSpeed();
+    int rightSpeed = drivesystem.getRightSpeed();
     if (left_ontape && right_ontape) {
       // slowly go forward
-    }
-    elif (left_ontape && !right_ontape) {
+      drivesystem.forward_slow();
+    } else if (left_ontape && !right_ontape) {
       // turn left a bit
-    }
-    elif (!left_ontape && right_ontape) {
+      drivesystem.update(leftSpeed - 3, rightSpeed + 3);
+    } else if (!left_ontape && right_ontape) {
       // turn right a bit
-    }
-    else
-    {
+      drivesystem.update(leftSpeed + 3, rightSpeed - 3);
+    } else {
       if (left_prev && !right_prev) {
         // turn left more
+        drivesystem.update(leftSpeed - 6, rightSpeed + 6);
       }
-      elif (!left_prev && right_prev) {
+      else if (!left_prev && right_prev) {
         // turn right more
+        drivesystem.update(leftSpeed + 6, rightSpeed - 6);
       }
       else {
         for (int i = 0; i < ONTAPE_RECORD_NUM; i++) {
           if (left_list[i] && !right_list[i]) {
             // turn left a lot
+            drivesystem.update(leftSpeed - 12, rightSpeed + 12);
           }
           if (right_list[i] && !left_list[i]) {
             // turn right a lot
+            drivesystem.update(leftSpeed + 12, rightSpeed - 12);
           }
         }
       }
@@ -137,7 +144,7 @@ void loop() {
 
 
 void set_tape_state(int lightvolt_left, int lightvolt_right) {
-  if (lightvolt_left > THRESHOLD_LIGHTVOLT) {
+  if (lightvolt_left > LEFT_THRESHOLD_LIGHTVOLT) {
     left_ontape = true;
     display.setCursor(0, 10);
     display.print("Left ON");
@@ -146,8 +153,8 @@ void set_tape_state(int lightvolt_left, int lightvolt_right) {
     display.setCursor(0, 10);
     display.print("Left OFF");
   }
-  display.print("       ");
-  if (lightvolt_right > THRESHOLD_LIGHTVOLT) {
+  display.print("   ");
+  if (lightvolt_right > RIGHT_THRESHOLD_LIGHTVOLT) {
     right_ontape = true;
     display.print("Right ON");
   } else {

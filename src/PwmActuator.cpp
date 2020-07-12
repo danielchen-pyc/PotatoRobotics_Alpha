@@ -4,6 +4,10 @@ PwmActuator::PwmActuator(int clock_freq): clock_freq(clock_freq) {
 
 }
 
+PwmActuator::~PwmActuator() {
+    
+}
+
 void PwmActuator::init(PinName pin) {
     pwm_start(pin, clock_freq, 20, PERCENT_COMPARE_FORMAT); // The motor vibrates but not spin at speed=20%
     

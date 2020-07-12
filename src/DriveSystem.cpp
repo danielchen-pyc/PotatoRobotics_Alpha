@@ -1,6 +1,8 @@
 #include "DriveSystem.h"
 
-#define STD_SPEED 80
+#define FAST 100
+#define MEDIUM 80
+#define SLOW 65
 
 DriveSystem::DriveSystem(PinName left_forward, PinName left_backward, PinName right_forward, PinName right_backward, int clock_freq)
 : Right(right_forward, right_backward, clock_freq), Left(left_forward, left_backward, clock_freq) {
@@ -16,6 +18,14 @@ void DriveSystem::init() {
     this->Right.init();
 }
 
+int DriveSystem::getLeftSpeed() {
+    return this->Left.getSpeed();
+}
+
+int DriveSystem::getRightSpeed() {
+    return this->Right.getSpeed();
+}
+
 void DriveSystem::update(int left_speed, int right_speed) {
     this->Left.update(left_speed);
     this->Right.update(right_speed);
@@ -26,12 +36,20 @@ void DriveSystem::stop(int duration) {
     this->Right.stop(duration);
 }
 
-void DriveSystem::forward() {
-    this->update(STD_SPEED, STD_SPEED);
+void DriveSystem::forward_fast() {
+    this->update(FAST, FAST);
+}
+
+void DriveSystem::forward_med() {
+    this->update(MEDIUM, MEDIUM);
+}
+
+void DriveSystem::forward_slow() {
+    this->update(SLOW, SLOW);
 }
 
 void DriveSystem::reverse() {
-    this->update(-STD_SPEED, -STD_SPEED);
+    this->update(-SLOW, -SLOW);
 }
 
 void DriveSystem::escapeCorner() {
