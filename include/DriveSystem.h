@@ -17,10 +17,20 @@ public:
     int getLeftSpeed();
     int getRightSpeed();
     void update(int left_speed, int right_speed);
+
+    // Actions
     void stop(int duration);
     void forward_fast();
     void forward_med();
     void forward_slow();
+
+    void left_bit();
+    void right_bit();
+    void left_more();
+    void right_more();
+    void left_lot();
+    void right_lot();
+
     void reverse();
     void escapeCorner();
     void actuate();

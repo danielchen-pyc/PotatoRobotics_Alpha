@@ -100,35 +100,33 @@ void loop() {
     }
     left_list[0] = left_ontape;
     right_list[0] = right_ontape;
-    int leftSpeed = drivesystem.getLeftSpeed();
-    int rightSpeed = drivesystem.getRightSpeed();
     if (left_ontape && right_ontape) {
       // slowly go forward
       drivesystem.forward_slow();
     } else if (left_ontape && !right_ontape) {
       // turn left a bit
-      drivesystem.update(leftSpeed - 3, rightSpeed + 3);
+      drivesystem.left_bit();
     } else if (!left_ontape && right_ontape) {
       // turn right a bit
-      drivesystem.update(leftSpeed + 3, rightSpeed - 3);
+      drivesystem.right_bit();
     } else {
       if (left_prev && !right_prev) {
         // turn left more
-        drivesystem.update(leftSpeed - 6, rightSpeed + 6);
+        drivesystem.left_more();
       }
       else if (!left_prev && right_prev) {
         // turn right more
-        drivesystem.update(leftSpeed + 6, rightSpeed - 6);
+        drivesystem.right_more();
       }
       else {
         for (int i = 0; i < ONTAPE_RECORD_NUM; i++) {
           if (left_list[i] && !right_list[i]) {
             // turn left a lot
-            drivesystem.update(leftSpeed - 12, rightSpeed + 12);
+            drivesystem.left_lot();
           }
           if (right_list[i] && !left_list[i]) {
             // turn right a lot
-            drivesystem.update(leftSpeed + 12, rightSpeed - 12);
+            drivesystem.right_lot();
           }
         }
       }

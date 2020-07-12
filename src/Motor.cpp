@@ -47,10 +47,10 @@ void Motor::stop(int duration) {
 
 void Motor::actuate() {
     if (isForward) {
-        PwmActuator::write(forward, speed);
+        PwmActuator::write(forward, this->speed);
         PwmActuator::write(backward, 0);
     } else {
         PwmActuator::write(forward, 0);
-        PwmActuator::write(backward, speed);
+        PwmActuator::write(backward, this->speed);
     }
 }

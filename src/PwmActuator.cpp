@@ -16,3 +16,12 @@ void PwmActuator::init(PinName pin) {
 void PwmActuator::write(PinName pin, int speed) {
     pwm_start(pin, clock_freq, speed, PERCENT_COMPARE_FORMAT);
 }
+
+void PwmActuator::calibrate(int speed) {
+    if (speed > 100) {
+        speed = 100;
+    } 
+    if (speed < 0) {
+        speed = 0;
+    }
+}

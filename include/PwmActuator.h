@@ -20,6 +20,7 @@ protected:
 
     void write(PinName pin, int speed);
 
+    void calibrate(int speed);
 };
 
 #endif
