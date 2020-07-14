@@ -23,7 +23,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 #define RIGHT_TAPE_SENSOR PB0
 #define LEFT_TAPE_SENSOR PB1
-#define RIGHT_THRESHOLD_LIGHTVOLT 37
+#define RIGHT_THRESHOLD_LIGHTVOLT 38
 #define LEFT_THRESHOLD_LIGHTVOLT 34.5
 
 bool found_tape;
@@ -73,12 +73,12 @@ void setup() {
   display.setCursor(0, 0);
   display.println("Setup Successful!");
   display.display();
-  delay(100);
+  delay(3000);
 }
 
 void loop() {
-  double lightvolt_left = analogRead(LEFT_TAPE_SENSOR);
-  double lightvolt_right = analogRead(RIGHT_TAPE_SENSOR);
+  int lightvolt_left = analogRead(LEFT_TAPE_SENSOR);
+  int lightvolt_right = analogRead(RIGHT_TAPE_SENSOR);
   display.clearDisplay();
   display.setCursor(0, 0);
   display.print(lightvolt_left);
@@ -90,7 +90,7 @@ void loop() {
   if (!found_tape && (left_ontape || right_ontape)) {
     found_tape = true;
   }
-  
+
   if (!found_tape) {
     drivesystem.forward_med();
   } else {
@@ -100,6 +100,18 @@ void loop() {
     }
     left_list[0] = left_ontape;
     right_list[0] = right_ontape;
+
+    display.setCursor(0, 30);
+    for (int l = 0; l < ONTAPE_RECORD_NUM; l++) {
+      display.print(left_list[l]);
+      display.print(" ");
+    }
+    display.setCursor(0, 40);
+    for (int r = 0; r < ONTAPE_RECORD_NUM; r++) {
+      display.print(right_list[r]);
+      display.print(" ");
+    }
+
     if (left_ontape && right_ontape) {
       // slowly go forward
       drivesystem.forward_slow();
@@ -131,15 +143,14 @@ void loop() {
         }
       }
     }
-    
   }
 
   display.display();
 
   left_prev = left_ontape;
   right_prev = right_ontape;
+  delay(50);
 }
-
 
 void set_tape_state(int lightvolt_left, int lightvolt_right) {
   if (lightvolt_left > LEFT_THRESHOLD_LIGHTVOLT) {

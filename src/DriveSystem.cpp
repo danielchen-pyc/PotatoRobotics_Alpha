@@ -1,12 +1,12 @@
 #include "DriveSystem.h"
 
 #define FAST 100
-#define MEDIUM 65
+#define MEDIUM 75
 #define SLOW 55
 #define A_BIT 6
 #define MORE 10
-#define A_LOT 16
-#define RIGHT_CALIBRATION 19
+#define A_LOT 14
+#define RIGHT_CALIBRATION 3
 
 DriveSystem::DriveSystem(PinName left_forward, PinName left_backward, PinName right_forward, PinName right_backward, int clock_freq)
 : Right(right_forward, right_backward, clock_freq), Left(left_forward, left_backward, clock_freq) {
