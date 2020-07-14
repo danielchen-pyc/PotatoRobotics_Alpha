@@ -23,8 +23,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 #define RIGHT_TAPE_SENSOR PB0
 #define LEFT_TAPE_SENSOR PB1
-#define RIGHT_THRESHOLD_LIGHTVOLT 38
-#define LEFT_THRESHOLD_LIGHTVOLT 34.5
+#define RIGHT_THRESHOLD_LIGHTVOLT 70
+#define LEFT_THRESHOLD_LIGHTVOLT 70
 
 bool found_tape;
 bool left_ontape;
@@ -112,33 +112,44 @@ void loop() {
       display.print(" ");
     }
 
+    display.setCursor(0, 50);
     if (left_ontape && right_ontape) {
       // slowly go forward
       drivesystem.forward_slow();
+      display.print("slowly go forward");
     } else if (left_ontape && !right_ontape) {
       // turn left a bit
       drivesystem.left_bit();
+      display.print("turn left a bit");
     } else if (!left_ontape && right_ontape) {
       // turn right a bit
       drivesystem.right_bit();
+      display.print("turn right a bit");
     } else {
       if (left_prev && !right_prev) {
         // turn left more
         drivesystem.left_more();
+        display.print("turn left more");
       }
       else if (!left_prev && right_prev) {
         // turn right more
         drivesystem.right_more();
+        display.print("turn right more");
       }
       else {
-        for (int i = 0; i < ONTAPE_RECORD_NUM; i++) {
+        bool turned = false;
+        for (int i = 0; i < ONTAPE_RECORD_NUM && !turned; i++) {
           if (left_list[i] && !right_list[i]) {
             // turn left a lot
             drivesystem.left_lot();
+            display.print("turn left a lot");
+            turned = true;
           }
           if (right_list[i] && !left_list[i]) {
             // turn right a lot
             drivesystem.right_lot();
+            display.print("turn right a lot");
+            turned = true;
           }
         }
       }
