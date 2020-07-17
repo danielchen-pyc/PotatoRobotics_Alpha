@@ -17,9 +17,9 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define PWM_FREQ 2000
 
 #define MOTOR_LEFT_FORWARD PA_0
-#define MOTOR_LEFT_REVERSE PA_3
-#define MOTOR_RIGHT_FORWARD PA_1
-#define MOTOR_RIGHT_REVERSE PA_2
+#define MOTOR_LEFT_REVERSE PA_1
+#define MOTOR_RIGHT_FORWARD PA_2
+#define MOTOR_RIGHT_REVERSE PA_3
 
 #define RIGHT_TAPE_SENSOR PB0
 #define LEFT_TAPE_SENSOR PB1
@@ -37,7 +37,7 @@ bool left_list[ONTAPE_RECORD_NUM];
 bool right_list[ONTAPE_RECORD_NUM];
 
 
-DriveSystem drivesystem = DriveSystem(MOTOR_LEFT_FORWARD, MOTOR_LEFT_REVERSE, MOTOR_RIGHT_FORWARD, MOTOR_LEFT_REVERSE, PWM_FREQ);
+DriveSystem drivesystem = DriveSystem(MOTOR_LEFT_FORWARD, MOTOR_LEFT_REVERSE, MOTOR_RIGHT_FORWARD, MOTOR_RIGHT_REVERSE, PWM_FREQ);
 
 
 void setup() {
@@ -60,8 +60,7 @@ void setup() {
   pwm_stop(MOTOR_RIGHT_FORWARD);
   pwm_stop(MOTOR_RIGHT_REVERSE);
 
-  // drivesystem.forward();
-
+  drivesystem.update(-80, -80);
 
   // Set up Variables Here
   found_tape = false;
@@ -77,90 +76,90 @@ void setup() {
 }
 
 void loop() {
-  int lightvolt_left = analogRead(LEFT_TAPE_SENSOR);
-  int lightvolt_right = analogRead(RIGHT_TAPE_SENSOR);
-  display.clearDisplay();
-  display.setCursor(0, 0);
-  display.print(lightvolt_left);
-  display.print("    ");
-  display.print(lightvolt_right);
+  // int lightvolt_left = analogRead(LEFT_TAPE_SENSOR);
+  // int lightvolt_right = analogRead(RIGHT_TAPE_SENSOR);
+  // display.clearDisplay();
+  // display.setCursor(0, 0);
+  // display.print(lightvolt_left);
+  // display.print("    ");
+  // display.print(lightvolt_right);
 
-  set_tape_state(lightvolt_left, lightvolt_right);
+  // set_tape_state(lightvolt_left, lightvolt_right);
   
-  if (!found_tape && (left_ontape || right_ontape)) {
-    found_tape = true;
-  }
+  // if (!found_tape && (left_ontape || right_ontape)) {
+  //   found_tape = true;
+  // }
 
-  if (!found_tape) {
-    drivesystem.forward_med();
-  } else {
-    for (int k = ONTAPE_RECORD_NUM - 1; k >= 1; k--) {
-      left_list[k] = left_list[k-1];
-      right_list[k] = right_list[k-1];
-    }
-    left_list[0] = left_ontape;
-    right_list[0] = right_ontape;
+  // if (!found_tape) {
+  //   drivesystem.forward_med();
+  // } else {
+  //   for (int k = ONTAPE_RECORD_NUM - 1; k >= 1; k--) {
+  //     left_list[k] = left_list[k-1];
+  //     right_list[k] = right_list[k-1];
+  //   }
+  //   left_list[0] = left_ontape;
+  //   right_list[0] = right_ontape;
 
-    display.setCursor(0, 30);
-    for (int l = 0; l < ONTAPE_RECORD_NUM; l++) {
-      display.print(left_list[l]);
-      display.print(" ");
-    }
-    display.setCursor(0, 40);
-    for (int r = 0; r < ONTAPE_RECORD_NUM; r++) {
-      display.print(right_list[r]);
-      display.print(" ");
-    }
+  //   display.setCursor(0, 30);
+  //   for (int l = 0; l < ONTAPE_RECORD_NUM; l++) {
+  //     display.print(left_list[l]);
+  //     display.print(" ");
+  //   }
+  //   display.setCursor(0, 40);
+  //   for (int r = 0; r < ONTAPE_RECORD_NUM; r++) {
+  //     display.print(right_list[r]);
+  //     display.print(" ");
+  //   }
 
-    display.setCursor(0, 50);
-    if (left_ontape && right_ontape) {
-      // slowly go forward
-      drivesystem.forward_slow();
-      display.print("slowly go forward");
-    } else if (left_ontape && !right_ontape) {
-      // turn left a bit
-      drivesystem.left_bit();
-      display.print("turn left a bit");
-    } else if (!left_ontape && right_ontape) {
-      // turn right a bit
-      drivesystem.right_bit();
-      display.print("turn right a bit");
-    } else {
-      if (left_prev && !right_prev) {
-        // turn left more
-        drivesystem.left_more();
-        display.print("turn left more");
-      }
-      else if (!left_prev && right_prev) {
-        // turn right more
-        drivesystem.right_more();
-        display.print("turn right more");
-      }
-      else {
-        bool turned = false;
-        for (int i = 0; i < ONTAPE_RECORD_NUM && !turned; i++) {
-          if (left_list[i] && !right_list[i]) {
-            // turn left a lot
-            drivesystem.left_lot();
-            display.print("turn left a lot");
-            turned = true;
-          }
-          if (right_list[i] && !left_list[i]) {
-            // turn right a lot
-            drivesystem.right_lot();
-            display.print("turn right a lot");
-            turned = true;
-          }
-        }
-      }
-    }
-  }
+  //   display.setCursor(0, 50);
+  //   if (left_ontape && right_ontape) {
+  //     // slowly go forward
+  //     drivesystem.forward_slow();
+  //     display.print("slowly go forward");
+  //   } else if (left_ontape && !right_ontape) {
+  //     // turn left a bit
+  //     drivesystem.left_bit();
+  //     display.print("turn left a bit");
+  //   } else if (!left_ontape && right_ontape) {
+  //     // turn right a bit
+  //     drivesystem.right_bit();
+  //     display.print("turn right a bit");
+  //   } else {
+  //     if (left_prev && !right_prev) {
+  //       // turn left more
+  //       drivesystem.left_more();
+  //       display.print("turn left more");
+  //     }
+  //     else if (!left_prev && right_prev) {
+  //       // turn right more
+  //       drivesystem.right_more();
+  //       display.print("turn right more");
+  //     }
+  //     else {
+  //       bool turned = false;
+  //       for (int i = 0; i < ONTAPE_RECORD_NUM && !turned; i++) {
+  //         if (left_list[i] && !right_list[i]) {
+  //           // turn left a lot
+  //           drivesystem.left_lot();
+  //           display.print("turn left a lot");
+  //           turned = true;
+  //         }
+  //         if (right_list[i] && !left_list[i]) {
+  //           // turn right a lot
+  //           drivesystem.right_lot();
+  //           display.print("turn right a lot");
+  //           turned = true;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
-  display.display();
+  // display.display();
 
-  left_prev = left_ontape;
-  right_prev = right_ontape;
-  delay(50);
+  // left_prev = left_ontape;
+  // right_prev = right_ontape;
+  // delay(50);
 }
 
 void set_tape_state(int lightvolt_left, int lightvolt_right) {

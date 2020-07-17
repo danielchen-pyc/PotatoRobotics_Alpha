@@ -56,7 +56,7 @@ void DriveSystem::forward_slow() {
 }
 
 void DriveSystem::reverse() {
-    this->update(-SLOW, -SLOW);
+    this->update(-MEDIUM, -MEDIUM);
 }
 
 void DriveSystem::escapeCorner() {
