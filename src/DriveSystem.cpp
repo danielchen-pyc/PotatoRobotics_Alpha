@@ -40,8 +40,17 @@ void DriveSystem::stop(int duration) {
     this->Right.stop(duration);
 }
 
+void DriveSystem::stop() {
+    this->update(0, 0);
+}
 
-// Actions 
+void DriveSystem::actuate() {
+    this->Left.actuate();
+    this->Right.actuate();
+}
+
+
+// Moving Actions 
 
 void DriveSystem::forward_fast() {
     this->update(FAST, FAST);
@@ -53,24 +62,6 @@ void DriveSystem::forward_med() {
 
 void DriveSystem::forward_slow() {
     this->update(SLOW, SLOW);
-}
-
-void DriveSystem::reverse() {
-    this->update(-MEDIUM, -MEDIUM);
-}
-
-void DriveSystem::escapeCorner() {
-    // TODO: This method need to be tested a few times and modified
-    this->reverse();
-    delay(1000);
-    this->update(SLOW, -SLOW);
-    delay(300);
-    this->init();
-}
-
-void DriveSystem::actuate() {
-    this->Left.actuate();
-    this->Right.actuate();
 }
 
 void DriveSystem::left_bit() {
@@ -95,4 +86,25 @@ void DriveSystem::left_lot() {
 
 void DriveSystem::right_lot() {
     this->update(SLOW + A_LOT, SLOW - A_LOT);
+}
+
+void DriveSystem::rotate_left() {
+    this->update(-SLOW, SLOW);
+}
+
+void DriveSystem::rotate_right() {
+    this->update(SLOW, -SLOW);
+}
+
+void DriveSystem::reverse() {
+    this->update(-MEDIUM, -MEDIUM);
+}
+
+void DriveSystem::escapeCorner() {
+    // TODO: This method need to be tested a few times and modified
+    this->reverse();
+    delay(1000);
+    this->update(SLOW, -SLOW);
+    delay(300);
+    this->init();
 }

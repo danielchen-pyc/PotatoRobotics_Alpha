@@ -17,9 +17,12 @@ public:
     int getLeftSpeed();
     int getRightSpeed();
     void update(int left_speed, int right_speed);
+    void actuate();
+
 
     // Actions
     void stop(int duration);
+    void stop();
     void forward_fast();
     void forward_med();
     void forward_slow();
@@ -31,9 +34,11 @@ public:
     void left_lot();
     void right_lot();
 
+    void rotate_left();
+    void rotate_right();
+
     void reverse();
     void escapeCorner();
-    void actuate();
 };
 
 #endif
