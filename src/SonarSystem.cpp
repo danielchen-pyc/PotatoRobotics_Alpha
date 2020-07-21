@@ -2,16 +2,15 @@
 
 #define MAX_DISTANCE 200
 
-SonarSystem::SonarSystem(int TRIGGER_PIN_LEFT, int ECHO_PIN_LEFT, int TRIGGER_PIN_FRONT, int ECHO_PIN_FRONT, int TRIGGER_PIN_RIGHT, int ECHO_PIN_RIGHT) {
-    sonar_left = new NewPing(TRIGGER_PIN_LEFT, ECHO_PIN_LEFT, MAX_DISTANCE);
-    sonar_front = new NewPing(TRIGGER_PIN_FRONT, ECHO_PIN_FRONT, MAX_DISTANCE);
-    sonar_right = new NewPing(TRIGGER_PIN_RIGHT, ECHO_PIN_RIGHT, MAX_DISTANCE);
+SonarSystem::SonarSystem(int left_trigger, int left_echo, int front_trigger, int front_echo, int right_trigger, int right_echo) {
+    SonarSystem::sonar_left = new NewPing(left_trigger, left_echo, MAX_DISTANCE);
+    SonarSystem::sonar_front = new NewPing(front_trigger, front_echo, MAX_DISTANCE);
+    SonarSystem::sonar_right = new NewPing(right_trigger, right_echo, MAX_DISTANCE);
+    // init(sonar_left, sonar_front, sonar_right) ;
 }
 
 SonarSystem::~SonarSystem() {
-    delete sonar_left;
-    delete sonar_front;
-    delete sonar_right;
+
 }
 
 int SonarSystem::getFrontDistance() {

@@ -10,16 +10,16 @@
 class SonarSystem
 {
 private:
-    static NewPing* sonar_left;
-    static NewPing* sonar_front;
-    static NewPing* sonar_right;
-public:
-    SonarSystem(int TRIGGER_PIN_LEFT, int ECHO_PIN_LEFT, int TRIGGER_PIN_FRONT, int ECHO_PIN_FRONT, int TRIGGER_PIN_RIGHT, int ECHO_PIN_RIGHT);
-    virtual ~SonarSystem();
-    static int getFrontDistance();
-    static int getLeftDistance();
-    static int getRightDistance();
+    NewPing* sonar_left;
+    NewPing* sonar_front;
+    NewPing* sonar_right;
     
+public:
+    SonarSystem(int left_trigger, int left_echo, int front_trigger, int front_echo, int right_trigger, int right_echo);
+    ~SonarSystem();
+    int getFrontDistance();
+    int getLeftDistance();
+    int getRightDistance();
 };
 
 #endif

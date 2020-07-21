@@ -7,6 +7,7 @@
 
 #include <Arduino.h>
 #include <Servo.h>
+#include "SonarSystem.h"
 
 class ClawSystem
 {
@@ -24,7 +25,7 @@ public:
     void close_claw();
     void grab();
     void dispose_can_sequence();
-    void check_can_sequence();
+    void check_can_sequence(SonarSystem &sonarsystem);
     void rest_arm();
     void lower_arm();
     void raise_arm();

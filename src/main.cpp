@@ -3,8 +3,9 @@
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
 #include <cmath>
-#include "NewPing.h"
 #include "DriveSystem.h"
+#include "SonarSystem.h"
+#include "ClawSystem.h"
 
 using namespace std;
 
@@ -34,6 +35,11 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define ONTAPE_RECORD_NUM 10
 bool left_list[ONTAPE_RECORD_NUM];
 bool right_list[ONTAPE_RECORD_NUM];
+bool found_tape;
+bool left_ontape;
+bool left_prev;
+bool right_ontape;
+bool right_prev;
 
 // SONAR
 #define TRIGGER_PIN_LEFT PA11 // sonar uses digital pins
@@ -42,24 +48,19 @@ bool right_list[ONTAPE_RECORD_NUM];
 #define ECHO_PIN_RIGHT PB3
 #define TRIGGER_PIN_FRONT PB4
 #define ECHO_PIN_FRONT PB5
-#define MAX_DISTANCE 200
-NewPing sonar_left(TRIGGER_PIN_LEFT, ECHO_PIN_LEFT, MAX_DISTANCE);
-NewPing sonar_right(TRIGGER_PIN_RIGHT, ECHO_PIN_RIGHT, MAX_DISTANCE);
-NewPing sonar_front(TRIGGER_PIN_FRONT, ECHO_PIN_FRONT, MAX_DISTANCE);
+SonarSystem sonarsystem(TRIGGER_PIN_LEFT, ECHO_PIN_LEFT,  TRIGGER_PIN_FRONT, ECHO_PIN_FRONT, TRIGGER_PIN_RIGHT, ECHO_PIN_RIGHT);
 #define LEFT_CAN_THRESHOLD 45
 #define RIGHT_CAN_THRESHOLD 45
 #define GRABBING_THRESHOLD 8
 
-// 
-bool found_tape;
-bool left_ontape;
-bool left_prev;
-bool right_ontape;
-bool right_prev;
-
-
-
+// DRIVE SYSTEM
 DriveSystem drivesystem = DriveSystem(MOTOR_LEFT_FORWARD, MOTOR_LEFT_REVERSE, MOTOR_RIGHT_FORWARD, MOTOR_RIGHT_REVERSE, PWM_FREQ);
+
+// CLAW SYSTEM
+#define ARM_PIN PA6
+#define CLAW_PIN PA3
+// ClawSystem clawsystem = ClawSystem()
+
 
 void setup() {
   Serial.begin(9600);
@@ -108,64 +109,64 @@ void loop() {
 
   // Claw Servo Test Section
   
-  if (!found_tape && (left_ontape || right_ontape)) {
-    found_tape = true;
-  }
+  // if (!found_tape && (left_ontape || right_ontape)) {
+  //   found_tape = true;
+  // }
 
-  display.setCursor(0, 20);
-  unsigned int left_distance = sonar_left.ping_cm();
-  unsigned int front_distance = sonar_front.ping_cm();
-  unsigned int right_distance = sonar_right.ping_cm();
+  // display.setCursor(0, 20);
+  // unsigned int left_distance = sonar_left.ping_cm();
+  // unsigned int front_distance = sonar_front.ping_cm();
+  // unsigned int right_distance = sonar_right.ping_cm();
 
-  display.print(left_distance);
-  display.print("   ");
-  display.print(front_distance);
-  display.print("   ");
-  display.print(right_distance);
+  // display.print(left_distance);
+  // display.print("   ");
+  // display.print(front_distance);
+  // display.print("   ");
+  // display.print(right_distance);
 
-  if (!found_tape) {
-    drivesystem.forward_med();
-  } else if (left_distance < LEFT_CAN_THRESHOLD) {
-    display.clearDisplay();
-    display.setCursor(0, 0);
-    display.print("CAN ON LEFT");
-    bool aimed_object_left = false;
-    drivesystem.stop(500);
+  // if (!found_tape) {
+  //   drivesystem.forward_med();
+  // } else if (left_distance < LEFT_CAN_THRESHOLD) {
+  //   display.clearDisplay();
+  //   display.setCursor(0, 0);
+  //   display.print("CAN ON LEFT");
+  //   bool aimed_object_left = false;
+  //   drivesystem.stop(500);
 
-    // Starting to rotate robot to aim at the can
-    while (front_distance > LEFT_CAN_THRESHOLD) {
-      front_distance = sonar_front.ping_cm();
-      drivesystem.rotate_left();
-      display.setCursor(0, 10);
-      display.print("Aiming.....");
-    }
-    delay(200); // to make sure it's centered 
-    aimed_object_left = true;
-    display.setCursor(0, 20);
-    display.print("Aimed");
-    drivesystem.stop(500);
+  //   // Starting to rotate robot to aim at the can
+  //   while (front_distance > LEFT_CAN_THRESHOLD) {
+  //     front_distance = sonar_front.ping_cm();
+  //     drivesystem.rotate_left();
+  //     display.setCursor(0, 10);
+  //     display.print("Aiming.....");
+  //   }
+  //   delay(200); // to make sure it's centered 
+  //   aimed_object_left = true;
+  //   display.setCursor(0, 20);
+  //   display.print("Aimed");
+  //   drivesystem.stop(500);
 
-    // Engage
-    while (front_distance > GRABBING_THRESHOLD) {
-      front_distance = sonar_front.ping_cm();
-      drivesystem.forward_slow();
-      // if off-tracked
-      if (front_distance > LEFT_CAN_THRESHOLD) {
-        while (front_distance > LEFT_CAN_THRESHOLD) {
-          drivesystem.rotate_left();
-        }
-      }
-    }
+  //   // Engage
+  //   while (front_distance > GRABBING_THRESHOLD) {
+  //     front_distance = sonar_front.ping_cm();
+  //     drivesystem.forward_slow();
+  //     // if off-tracked
+  //     if (front_distance > LEFT_CAN_THRESHOLD) {
+  //       while (front_distance > LEFT_CAN_THRESHOLD) {
+  //         drivesystem.rotate_left();
+  //       }
+  //     }
+  //   }
     
-    // Grab 
+  //   // Grab 
     
-  }
-  else {
-    display.clearDisplay();
-    display.setCursor(0, 0);
-    display.print("TAPE FOLLOWING");
-    follow_tape();
-  }
+  // }
+  // else {
+  //   display.clearDisplay();
+  //   display.setCursor(0, 0);
+  //   display.print("TAPE FOLLOWING");
+  //   follow_tape();
+  // }
 
 
   left_prev = left_ontape;
