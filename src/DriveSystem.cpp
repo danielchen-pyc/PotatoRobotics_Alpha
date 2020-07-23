@@ -1,12 +1,12 @@
 #include "DriveSystem.h"
 
 #define FAST 100
-#define MEDIUM 80
-#define SLOW 70
+#define MEDIUM 85
+#define SLOW 68
 #define A_BIT 3
 #define MORE 7
 #define A_LOT 10
-#define RIGHT_CALIBRATION 9
+#define RIGHT_CALIBRATION 0
 
 DriveSystem::DriveSystem(PinName left_forward, PinName left_backward, PinName right_forward, PinName right_backward, int clock_freq)
 : Right(right_forward, right_backward, clock_freq), Left(left_forward, left_backward, clock_freq) {
@@ -41,7 +41,7 @@ void DriveSystem::stop(int duration) {
 }
 
 void DriveSystem::stop() {
-    this->update(0, 0);
+    this->init();
 }
 
 void DriveSystem::actuate() {
@@ -65,35 +65,35 @@ void DriveSystem::forward_slow() {
 }
 
 void DriveSystem::left_bit() {
-    this->update(SLOW - A_BIT, SLOW + A_BIT);
+    this->update(SLOW, SLOW + A_BIT);
 }
 
 void DriveSystem::right_bit() {
-    this->update(SLOW + A_BIT, SLOW - A_BIT);
+    this->update(SLOW + A_BIT, SLOW);
 }
 
 void DriveSystem::left_more() {
-    this->update(SLOW - MORE, SLOW + MORE);
+    this->update(SLOW, SLOW + MORE);
 }
 
 void DriveSystem::right_more() {
-    this->update(SLOW + MORE, SLOW - MORE);
+    this->update(SLOW + MORE, SLOW);
 }
 
 void DriveSystem::left_lot() {
-    this->update(SLOW - A_LOT, SLOW + A_LOT);
+    this->update(SLOW, SLOW + A_LOT);
 }
 
 void DriveSystem::right_lot() {
-    this->update(SLOW + A_LOT, SLOW - A_LOT);
+    this->update(SLOW + A_LOT, SLOW);
 }
 
 void DriveSystem::rotate_left() {
-    this->update(-SLOW, SLOW);
+    this->update(0, MEDIUM);
 }
 
 void DriveSystem::rotate_right() {
-    this->update(SLOW, -SLOW);
+    this->update(MEDIUM, 0);
 }
 
 void DriveSystem::reverse() {

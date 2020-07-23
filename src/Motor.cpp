@@ -16,7 +16,7 @@ int Motor::getSpeed() {
 }
 
 void Motor::init() {
-    this->speed = 0;
+    this->speed = 20;
     this->isForward = true;
     PwmActuator::init(this->forward); // we only have to init (make vibrate) one motor
     pinMode(this->forward, OUTPUT);
@@ -24,18 +24,15 @@ void Motor::init() {
 }
 
 void Motor::update(int speed) {
-    PinName updatePin;
-
-    if (speed > 0) {
-        updatePin = this->forward;
+    if (speed >= 0) {
         isForward = true;
+        PwmActuator::write(this->forward, speed);
     } else {
-        updatePin = this->backward;
         isForward = false;
+        PwmActuator::write(this->backward, -speed);
     }
 
     this->speed = speed;
-    PwmActuator::write(updatePin, speed);
 }
 
 void Motor::stop(int duration) {

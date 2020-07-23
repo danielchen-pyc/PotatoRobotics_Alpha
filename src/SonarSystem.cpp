@@ -13,15 +13,15 @@ SonarSystem::~SonarSystem() {
 
 }
 
-int SonarSystem::getFrontDistance() {
+unsigned int SonarSystem::getFrontDistance() {
     return sonar_front->ping_cm();
 }
 
-int SonarSystem::getLeftDistance() {
+unsigned int SonarSystem::getLeftDistance() {
     return sonar_left->ping_cm();
 }
 
-int SonarSystem::getRightDistance() {
+unsigned int SonarSystem::getRightDistance() {
     return sonar_right->ping_cm();
 }
 

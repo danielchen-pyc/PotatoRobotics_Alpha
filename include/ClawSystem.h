@@ -16,14 +16,16 @@ private:
     int claw_pin;
     Servo arm_servo;
     Servo claw_servo;
-    int currentPos;
+    string currentPos;
 
 public:
-    ClawSystem(int armpin, int claw_pin);
+    ClawSystem(int arm_pin, int claw_pin);
     virtual ~ClawSystem();
+    void init();
     void open_claw();
     void close_claw();
     void grab();
+    void grab_can_sequence();
     void dispose_can_sequence();
     void check_can_sequence(SonarSystem &sonarsystem);
     void rest_arm();

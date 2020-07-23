@@ -17,9 +17,9 @@ private:
 public:
     SonarSystem(int left_trigger, int left_echo, int front_trigger, int front_echo, int right_trigger, int right_echo);
     ~SonarSystem();
-    int getFrontDistance();
-    int getLeftDistance();
-    int getRightDistance();
+    unsigned int getFrontDistance();
+    unsigned int getLeftDistance();
+    unsigned int getRightDistance();
 };
 
 #endif
