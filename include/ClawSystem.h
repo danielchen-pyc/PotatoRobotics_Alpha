@@ -16,7 +16,7 @@ private:
     int claw_pin;
     Servo arm_servo;
     Servo claw_servo;
-    string currentPos;
+    String currentPos;
 
 public:
     ClawSystem(int arm_pin, int claw_pin);

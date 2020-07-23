@@ -29,7 +29,7 @@ void Motor::update(int speed) {
         PwmActuator::write(this->forward, speed);
     } else {
         isForward = false;
-        PwmActuator::write(this->backward, -speed);
+        PwmActuator::write(this->backward, speed);
     }
 
     this->speed = speed;
