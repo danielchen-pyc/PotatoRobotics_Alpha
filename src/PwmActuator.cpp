@@ -9,7 +9,7 @@ PwmActuator::~PwmActuator() {
 }
 
 void PwmActuator::init(PinName pin) {
-    pwm_start(pin, clock_freq, 20, PERCENT_COMPARE_FORMAT); // The motor vibrates but not spin at speed=20%
+    pwm_start(pin, clock_freq, 10, PERCENT_COMPARE_FORMAT); // The motor vibrates but not spin at speed=20%
 }
 
 void PwmActuator::write(PinName pin, int speed) {

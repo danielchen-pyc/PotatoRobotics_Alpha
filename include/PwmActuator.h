@@ -11,15 +11,10 @@ class PwmActuator
 {
 protected:
     const int clock_freq;
-
     PwmActuator(int clock_freq);
-
     virtual ~PwmActuator();
-
     void init(PinName pin);
-
     void write(PinName pin, int speed);
-
     void calibrate(int speed);
 };
 
