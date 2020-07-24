@@ -20,6 +20,9 @@ public:
     unsigned int getFrontDistance();
     unsigned int getLeftDistance();
     unsigned int getRightDistance();
+    unsigned int getFrontDistance_accurate();
+    unsigned int getLeftDistance_accurate();
+    unsigned int getRightDistance_accurate();
 };
 
 #endif

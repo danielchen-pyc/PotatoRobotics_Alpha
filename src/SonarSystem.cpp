@@ -25,3 +25,16 @@ unsigned int SonarSystem::getRightDistance() {
     return sonar_right->ping_cm();
 }
 
+
+unsigned int SonarSystem::getFrontDistance_accurate() {
+    return sonar_front->convert_cm(sonar_front->ping_median(5));
+}
+
+unsigned int SonarSystem::getLeftDistance_accurate() {
+    return sonar_left->convert_cm(sonar_left->ping_median(5));
+}
+
+unsigned int SonarSystem::getRightDistance_accurate() {
+    return sonar_right->convert_cm(sonar_left->ping_median(5));
+}
+

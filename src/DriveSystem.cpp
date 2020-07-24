@@ -1,12 +1,13 @@
 #include "DriveSystem.h"
 
 #define FAST 70
-#define MEDIUM 45
-#define SLOW 40
-#define A_BIT 3
-#define MORE 4
-#define A_LOT 5
-#define RIGHT_CALIBRATION 0
+#define MEDIUM 44
+#define SLOW 39.5
+#define ROTATE_SPEED 39
+#define A_BIT 1.5
+#define MORE 2
+#define A_LOT 3
+#define RIGHT_CALIBRATION -2
 #define LEFT_CALIBRATION 0
 
 DriveSystem::DriveSystem(PinName left_forward, PinName left_backward, PinName right_forward, PinName right_backward, int clock_freq)
@@ -91,12 +92,11 @@ void DriveSystem::right_lot() {
 }
 
 void DriveSystem::rotate_left() {
-    this->update(0, SLOW);
-    this->Left.init();
+    this->update(0, ROTATE_SPEED);
 }
 
 void DriveSystem::rotate_right() {
-    this->update(SLOW, 0);
+    this->update(ROTATE_SPEED, 0);
 }
 
 void DriveSystem::reverse() {
