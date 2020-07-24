@@ -88,8 +88,9 @@ void setup() {
 
   // Testing Area
   drivesystem.init();
-  // drivesystem.forward_slow();
-  // drivesystem.stop(3000);
+  drivesystem.forward_slow();
+  delay(3000);
+  drivesystem.stop(3000);
   
 
   // Set up Variables Here
@@ -102,14 +103,16 @@ void setup() {
   display.setCursor(0, 0);
   display.println("Setup Successful!");
   display.display();
+  display.clearDisplay();
+  delay(3000);
 }
 
 void loop() {
-  // DriveSystem Test Section
-  drivesystem.forward_slow();
-  delay(4000);
+  // // DriveSystem Test Section
+  // drivesystem.forward_slow();
+  // delay(4000);
   
-  drivesystem.stop(3000);
+  // drivesystem.stop(3000);
 
 
   // Sonar Test Section
@@ -125,21 +128,23 @@ void loop() {
 
   // Actual Code
   display.clearDisplay();
+  display.setCursor(0, 0);
   
   if (!found_tape && (left_ontape || right_ontape)) {
     found_tape = true;
   }
 
   // // display.setCursor(0, 0);
-  // unsigned int left_distance = sonarsystem.getLeftDistance();
-  // unsigned int front_distance = sonarsystem.getFrontDistance();
-  // unsigned int right_distance = sonarsystem.getRightDistance();
+  unsigned int left_distance = sonarsystem.getLeftDistance();
+  unsigned int front_distance = sonarsystem.getFrontDistance();
+  unsigned int right_distance = sonarsystem.getRightDistance();
 
-  // display.print(left_distance);
-  // display.print("   ");
-  // display.print(front_distance);
-  // display.print("   ");
-  // display.print(right_distance);
+  display.print(left_distance);
+  display.print("   ");
+  display.print(front_distance);
+  display.print("   ");
+  display.print(right_distance);
+  display.display();
 
   int lightvolt_left = analogRead(LEFT_TAPE_SENSOR);
   int lightvolt_right = analogRead(RIGHT_TAPE_SENSOR);
@@ -168,44 +173,46 @@ void loop() {
   //   delay(200); // to make sure it's centered 
   //   display.println("Aimed. Stop for a sec.");
   //   display.display();
-  //   drivesystem.stop(500);
+  //   drivesystem.stop(3000);
 
   //   display.clearDisplay();
   //   display.setCursor(0, 0);
 
-  //   // Engage
-  //   do {
-  //     front_distance = sonarsystem.getFrontDistance();
-  //     display.clearDisplay();
-  //     display.print("Engage.");
-  //     display.display();
-  //     drivesystem.forward_slow();
-  //     // if off-tracked
-  //     if (front_distance > LEFT_CAN_THRESHOLD) {
-  //       while (front_distance > LEFT_CAN_THRESHOLD) {
-  //         drivesystem.rotate_left();
-  //       }
-  //     }
-  //   } while (front_distance > GRABBING_THRESHOLD);
+    // // Engage
+    // do {
+    //   front_distance = sonarsystem.getFrontDistance();
+    //   display.clearDisplay();
+    //   display.print("Engage.");
+    //   display.display();
+    //   drivesystem.forward_slow();
+    //   // if off-tracked
+    //   // if (front_distance > LEFT_CAN_THRESHOLD) {
+    //   //   while (front_distance > LEFT_CAN_THRESHOLD) {
+    //   //     drivesystem.rotate_left();
+    //   //   }
+    //   // }
+    // } while (front_distance > GRABBING_THRESHOLD);
+    // drivesystem.stop(3000);
     
-  //   // Grab, check, dispose
-  //   display.println("Grab can");
-  //   display.display();  
-  //   clawsystem.grab_can_sequence();
-  //   display.println("check can");
-  //   display.display(); 
-  //   clawsystem.check_can_sequence(sonarsystem);
-  //   display.println("dispose can");
-  //   display.display(); 
-  //   clawsystem.dispose_can_sequence();
+    // // Grab, check, dispose
+    // display.println("Grab can");
+    // display.display();  
+    // clawsystem.grab_can_sequence();
+    // display.println("check can");
+    // display.display(); 
+    // clawsystem.check_can_sequence(sonarsystem);
+    // display.println("dispose can");
+    // display.display(); 
+    // clawsystem.dispose_can_sequence();
 
-  //   // Go back
-  //   found_tape = false;
-  //   drivesystem.rotate_left();
-  //   delay(ROTATE90TIME*2);
-  //   drivesystem.forward_med();
+    // // Go back
+    // found_tape = false;
+    // drivesystem.rotate_left();
+    // delay(ROTATE90TIME*2);
+    // drivesystem.forward_med();
 
-  // } else if (right_distance < RIGHT_CAN_THRESHOLD && right_distance != 0) {
+  // } 
+  // else if (right_distance < RIGHT_CAN_THRESHOLD && right_distance != 0) {
   //   display.clearDisplay();
   //   display.setCursor(0, 0);
   //   display.println("CAN ON LEFT");    
@@ -282,8 +289,9 @@ void loop() {
   //   clawsystem.grab_can_sequence();
   //   clawsystem.check_can_sequence(sonarsystem);
   //   clawsystem.dispose_can_sequence();
-  // } else if (!found_tape) {
-    // drivesystem.forward_med();
+  // }
+  // if (!found_tape) {
+  //   drivesystem.forward_slow();
   // } else {
   //   // display.clearDisplay();
   //   // display.setCursor(0, 0);
@@ -298,7 +306,7 @@ void loop() {
 }
 
 void print_tape_state(int lightvolt_left, int lightvolt_right) {
-  display.setCursor(0, 20);
+  // display.setCursor(0, 20);
   if (lightvolt_left > LEFT_THRESHOLD_LIGHTVOLT) {
     left_ontape = true;
     // display.print("Left ON");

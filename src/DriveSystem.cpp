@@ -2,7 +2,7 @@
 
 #define FAST 70
 #define MEDIUM 45
-#define SLOW 40.5
+#define SLOW 40
 #define A_BIT 3
 #define MORE 4
 #define A_LOT 5
@@ -91,11 +91,12 @@ void DriveSystem::right_lot() {
 }
 
 void DriveSystem::rotate_left() {
-    this->update(0, MEDIUM);
+    this->update(0, SLOW);
+    this->Left.init();
 }
 
 void DriveSystem::rotate_right() {
-    this->update(MEDIUM, 0);
+    this->update(SLOW, 0);
 }
 
 void DriveSystem::reverse() {
