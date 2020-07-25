@@ -26,6 +26,10 @@ void ClawSystem::init() {
     this->claw_servo.attach(this->claw_pin);  
 }
 
+void ClawSystem::disconnect_arm() {
+    this->arm_servo.detach();
+}
+
 void ClawSystem::open_claw() {
     for (int servoPos = 90; servoPos >= 59; servoPos--) {
         claw_servo.write(servoPos);
@@ -69,7 +73,7 @@ void ClawSystem::dispose_can_sequence() {
 }
 
 void ClawSystem::check_can_sequence(SonarSystem &sonarsystem) {
-    this->raise_arm(CHECK_ARM_POS);
+    // this->raise_arm(CHECK_ARM_POS);
     // this->arm_servo.detach();
     if (sonarsystem.getFrontDistance() < 15) {
         // didn't successfully grabbed can -> regrab it
@@ -93,16 +97,24 @@ void ClawSystem::rest_arm() {
 }
 
 void ClawSystem::lower_arm() {
-    for (int armPos = ARM_FINALPOS; armPos <= ARM_INITPOS; armPos++) {
-        this->arm_servo.write(armPos);
-        delay(50);
+    for (int clawPos = 90; clawPos >= 79; clawPos--) {
+        this->arm_servo.write(clawPos);
+        delay(24);
+    }
+    for (int clawPos = 79; clawPos <= 90; clawPos++) {
+        this->arm_servo.write(clawPos);
+        delay(24);
     }
 }
 
 void ClawSystem::raise_arm() {
-    for (int armPos = ARM_INITPOS; armPos <= ARM_FINALPOS; armPos++) {
-        this->arm_servo.write(armPos);
-        delay(50);
+    for (int clawPos = 90; clawPos <= 108; clawPos++) {
+        this->arm_servo.write(clawPos);
+        delay(27);
+    }
+    for (int clawPos = 108; clawPos >= 90; clawPos--) {
+        this->arm_servo.write(clawPos);
+        delay(27);
     }
 }
 
