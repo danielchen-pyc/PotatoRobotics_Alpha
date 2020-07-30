@@ -32,11 +32,11 @@ void ClawSystem::disconnect_arm() {
 
 void ClawSystem::open_claw() {
     for (int servoPos = 90; servoPos >= 59; servoPos--) {
-        claw_servo.write(servoPos);
+        this->claw_servo.write(servoPos);
         delay(30);
     }
     for (int servoPos2 = 59; servoPos2 <= 90; servoPos2++) {
-        claw_servo.write(servoPos2);
+        this->claw_servo.write(servoPos2);
         delay(30);
     }
     this->currentPos = "open";

@@ -24,7 +24,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 // TAPE FOLLOWING
 #define RIGHT_TAPE_SENSOR PA6
 #define LEFT_TAPE_SENSOR PA4
-#define RIGHT_THRESHOLD_LIGHTVOLT 800
+#define RIGHT_THRESHOLD_LIGHTVOLT 160
 #define LEFT_THRESHOLD_LIGHTVOLT 800
 #define ONTAPE_RECORD_NUM 10
 bool left_list[ONTAPE_RECORD_NUM];
@@ -34,6 +34,7 @@ bool left_ontape;
 bool left_prev;
 bool right_ontape;
 bool right_prev;
+int off_tape_turn_lot_num;
 
 // SONAR
 #define TRIGGER_PIN_LEFT PB4 // sonar uses digital pins
@@ -69,7 +70,7 @@ void setup() {
   // Claw
   // clawsystem.rest_arm();
   // claw.attach(CLAW_PIN);
-  clawsystem.init(); 
+  clawsystem.init();
 
   // Serial.begin(9600);
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
@@ -87,14 +88,22 @@ void setup() {
 
 
   // Testing Area
-  // drivesystem.init();
-  // drivesystem.rotate_left();
+  drivesystem.init();
+  drivesystem.forward_slow();
+  delay(15000);
+  drivesystem.stop(3000);
+  // drivesystem.update(0, 20);
   // delay(ROTATE90TIME);
-  // drivesystem.stop(3000);
+  // drivesystem.update(0, 23);
+  // delay(ROTATE90TIME);
+  // drivesystem.update(0, 25);
+  // delay(ROTATE90TIME);
+  // drivesystem.update(0, 33);
   
 
   // Set up Variables Here
   found_tape = false;
+  off_tape_turn_lot_num = 0;
 
   // Print SetUp Message
   display.clearDisplay();
@@ -104,12 +113,11 @@ void setup() {
   display.println("Setup Successful!");
   display.display();
   display.clearDisplay();
-  delay(5000);
+  delay(3000);
   // clawsystem.raise_arm();
   // delay(5000);
   // clawsystem.grab();
   // delay(3000);
-  // // clawsystem.init();
   // clawsystem.disconnect_arm();
 }
 
@@ -122,16 +130,16 @@ void loop() {
   // Sonar Test Section
 
   // // Claw Test
-  clawsystem.grab();
-  delay(1000);
-  clawsystem.raise_arm();
-  delay(1000);
-  // clawsystem.grab_can_sequence();
-  // clawsystem.check_can_sequence(sonarsystem);
-  clawsystem.open_claw();
-  delay(3000);
-  clawsystem.lower_arm();
-  delay(5000);
+  // clawsystem.grab();
+  // delay(1000);
+  // clawsystem.raise_arm();
+  // delay(1000);
+  // // clawsystem.grab_can_sequence();
+  // // clawsystem.check_can_sequence(sonarsystem);
+  // clawsystem.open_claw();
+  // delay(3000);
+  // clawsystem.lower_arm();
+  // delay(5000);
 
 
 
@@ -302,18 +310,19 @@ void loop() {
   // //   clawsystem.check_can_sequence(sonarsystem);
   // //   clawsystem.dispose_can_sequence();
   // // }
-  // if (!found_tape) {
-  //   drivesystem.forward_slow();
-  // } else {
-  //   // display.clearDisplay();
-  //   // display.setCursor(0, 0);
-  //   // display.print("TAPE FOLLOWING");
-  //   follow_tape();
-  // }
+  if (!found_tape) {
+    drivesystem.forward_slow();
+    display.setCursor(0, 0);
+    display.print("NOT FOUND TAPE");
+  } else {
+    display.setCursor(0, 0);
+    display.print("TAPE FOLLOWING");
+    follow_tape();
+  }
 
-  // left_prev = left_ontape;
-  // right_prev = right_ontape;
-  // display.display();
+  left_prev = left_ontape;
+  right_prev = right_ontape;
+  display.display();
   // delay(50);
 }
 
@@ -344,9 +353,10 @@ void follow_tape() {
   left_list[0] = left_ontape;
   right_list[0] = right_ontape;
 
-  if (left_ontape && right_ontape) {
+  if (left_ontape && right_ontape || off_tape_turn_lot_num >= 50) {
     // slowly go forward
-    drivesystem.forward_med();
+    off_tape_turn_lot_num = 0;
+    drivesystem.forward_slow();
   } else if (left_ontape && !right_ontape) {
     // turn left a bit
     drivesystem.left_bit();
@@ -364,6 +374,7 @@ void follow_tape() {
     }
     else {
       bool turned = false;
+      off_tape_turn_lot_num++;
       for (int i = 0; i < ONTAPE_RECORD_NUM && !turned; i++) {
         if (left_list[i] && !right_list[i]) {
           // turn left a lot

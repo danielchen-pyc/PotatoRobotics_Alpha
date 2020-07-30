@@ -1,17 +1,20 @@
 #include "DriveSystem.h"
 
 #define FAST 100
-// #define MEDIUM 44
-#define MEDIUM 40
-// #define SLOW 39.5
+#define MEDIUM 42
 #define SLOW 39
+#define A_BIT 4
+#define MORE 6
+#define A_LOT 6.8
 #define ROTATE_SPEED 39
-#define A_BIT 2
-#define MORE 3
-#define A_LOT 3.5
-// #define A_BIT 3
-// #define MORE 5
-// #define A_LOT 8
+#define SLOW_FACTOR 0.2
+
+
+// #define MEDIUM 26
+// #define SLOW 24
+// #define A_BIT 5
+// #define MORE 10
+// #define A_LOT 14
 
 #define RIGHT_CALIBRATION 0
 #define LEFT_CALIBRATION 0
@@ -74,27 +77,27 @@ void DriveSystem::forward_slow() {
 }
 
 void DriveSystem::left_bit() {
-    this->update(SLOW, SLOW + A_BIT);
+    this->update(SLOW - SLOW_FACTOR * A_BIT, SLOW + A_BIT);
 }
 
 void DriveSystem::right_bit() {
-    this->update(SLOW + A_BIT, SLOW);
+    this->update(SLOW + A_BIT, SLOW - SLOW_FACTOR * A_BIT);
 }
 
 void DriveSystem::left_more() {
-    this->update(SLOW, SLOW + MORE);
+    this->update(SLOW - SLOW_FACTOR * MORE, SLOW + MORE);
 }
 
 void DriveSystem::right_more() {
-    this->update(SLOW + MORE, SLOW);
+    this->update(SLOW + MORE, SLOW - SLOW_FACTOR * MORE);
 }
 
 void DriveSystem::left_lot() {
-    this->update(SLOW, SLOW + A_LOT);
+    this->update(SLOW - SLOW_FACTOR * A_LOT, SLOW + A_LOT);
 }
 
 void DriveSystem::right_lot() {
-    this->update(SLOW + A_LOT, SLOW);
+    this->update(SLOW + A_LOT, SLOW - SLOW_FACTOR * A_LOT);
 }
 
 void DriveSystem::rotate_left() {
