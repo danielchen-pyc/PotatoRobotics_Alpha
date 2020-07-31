@@ -25,7 +25,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define RIGHT_TAPE_SENSOR PA6
 #define LEFT_TAPE_SENSOR PA4
 #define RIGHT_THRESHOLD_LIGHTVOLT 160
-#define LEFT_THRESHOLD_LIGHTVOLT 800
+#define LEFT_THRESHOLD_LIGHTVOLT 860
 #define ONTAPE_RECORD_NUM 10
 bool left_list[ONTAPE_RECORD_NUM];
 bool right_list[ONTAPE_RECORD_NUM];
@@ -88,10 +88,10 @@ void setup() {
 
 
   // Testing Area
-  drivesystem.init();
-  drivesystem.forward_slow();
-  delay(15000);
-  drivesystem.stop(3000);
+  // drivesystem.init();
+  // drivesystem.forward_slow();
+  // delay(15000);
+  // drivesystem.stop(3000);
   // drivesystem.update(0, 20);
   // delay(ROTATE90TIME);
   // drivesystem.update(0, 23);
@@ -165,12 +165,12 @@ void loop() {
 
   int lightvolt_left = analogRead(LEFT_TAPE_SENSOR);
   int lightvolt_right = analogRead(RIGHT_TAPE_SENSOR);
-  display.setCursor(0, 10);
-  display.print(lightvolt_left);
-  display.print("    ");
-  display.print(lightvolt_right);
-  display.display();
   print_tape_state(lightvolt_left, lightvolt_right);
+  // display.setCursor(0, 10);
+  // display.print(lightvolt_left);
+  // display.print("    ");
+  // display.print(lightvolt_right);
+  // display.display();
 
   // if (left_distance < LEFT_CAN_THRESHOLD && left_distance != 0) {
   //   display.clearDisplay();
@@ -353,10 +353,10 @@ void follow_tape() {
   left_list[0] = left_ontape;
   right_list[0] = right_ontape;
 
-  if (left_ontape && right_ontape || off_tape_turn_lot_num >= 50) {
+  if ((left_ontape && right_ontape) || off_tape_turn_lot_num >= 50) {
     // slowly go forward
     off_tape_turn_lot_num = 0;
-    drivesystem.forward_slow();
+    drivesystem.forward_med();
   } else if (left_ontape && !right_ontape) {
     // turn left a bit
     drivesystem.left_bit();

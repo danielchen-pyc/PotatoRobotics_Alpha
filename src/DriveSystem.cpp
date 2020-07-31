@@ -1,13 +1,13 @@
 #include "DriveSystem.h"
 
 #define FAST 100
-#define MEDIUM 42
-#define SLOW 39
-#define A_BIT 4
-#define MORE 6
-#define A_LOT 6.8
+#define MEDIUM 42.6
+#define SLOW 40.3
+#define A_BIT 2.5
+#define MORE 3.5
+#define A_LOT 4
 #define ROTATE_SPEED 39
-#define SLOW_FACTOR 0.2
+#define SLOW_FACTOR 0.15
 
 
 // #define MEDIUM 26
