@@ -14,6 +14,9 @@ using namespace std;
 // FUNCTION PROTOTYPE
 void print_tape_state(int lightvolt_left, int lightvolt_right);
 void follow_tape();
+// TEST FUNCTION PROTOTYPE
+void speedTest(String side);
+void rotateTest(String direction);
 
 // SCREEN
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
@@ -27,6 +30,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define RIGHT_THRESHOLD_LIGHTVOLT 160
 #define LEFT_THRESHOLD_LIGHTVOLT 860
 #define ONTAPE_RECORD_NUM 10
+#define OFFTAPELOTMAX 20
 bool left_list[ONTAPE_RECORD_NUM];
 bool right_list[ONTAPE_RECORD_NUM];
 bool found_tape;
@@ -47,7 +51,7 @@ SonarSystem sonarsystem(TRIGGER_PIN_LEFT, ECHO_PIN_LEFT,  TRIGGER_PIN_FRONT, ECH
 #define LEFT_CAN_THRESHOLD 35
 #define RIGHT_CAN_THRESHOLD 35
 #define FRONT_CAN_THRESHOLD 15
-#define GRABBING_THRESHOLD 15
+#define GRABBING_THRESHOLD 1
 
 // DRIVE SYSTEM
 #define PWM_FREQ 2000
@@ -56,7 +60,7 @@ SonarSystem sonarsystem(TRIGGER_PIN_LEFT, ECHO_PIN_LEFT,  TRIGGER_PIN_FRONT, ECH
 #define MOTOR_RIGHT_FORWARD PA_3
 #define MOTOR_RIGHT_REVERSE PA_7
 DriveSystem drivesystem(MOTOR_LEFT_FORWARD, MOTOR_LEFT_REVERSE, MOTOR_RIGHT_FORWARD, MOTOR_RIGHT_REVERSE, PWM_FREQ);
-#define ROTATE90TIME 1700
+#define ROTATE90TIME 620
 
 // CLAW SYSTEM
 #define ARM_PIN PB8
@@ -90,15 +94,9 @@ void setup() {
   // Testing Area
   // drivesystem.init();
   // drivesystem.forward_slow();
-  // delay(15000);
-  // drivesystem.stop(3000);
-  // drivesystem.update(0, 20);
-  // delay(ROTATE90TIME);
-  // drivesystem.update(0, 23);
-  // delay(ROTATE90TIME);
-  // drivesystem.update(0, 25);
-  // delay(ROTATE90TIME);
-  // drivesystem.update(0, 33);
+  delay(5000);
+  rotateTest("l");
+  
   
 
   // Set up Variables Here
@@ -152,16 +150,16 @@ void loop() {
     found_tape = true;
   }
 
-  // display.setCursor(0, 0);
-  // unsigned int left_distance = sonarsystem.getLeftDistance();
-  // unsigned int front_distance = sonarsystem.getFrontDistance();
-  // unsigned int right_distance = sonarsystem.getRightDistance();
+  display.setCursor(0, 0);
+  unsigned int left_distance = sonarsystem.getLeftDistance();
+  unsigned int front_distance = sonarsystem.getFrontDistance();
+  unsigned int right_distance = sonarsystem.getRightDistance();
 
-  // // display.print(left_distance);
-  // // display.print("   ");
-  // // display.print(front_distance);
-  // // display.print("   ");
-  // // display.print(right_distance);
+  display.print(left_distance);
+  display.print("   ");
+  display.print(front_distance);
+  display.print("   ");
+  display.print(right_distance);
 
   int lightvolt_left = analogRead(LEFT_TAPE_SENSOR);
   int lightvolt_right = analogRead(RIGHT_TAPE_SENSOR);
@@ -310,18 +308,18 @@ void loop() {
   // //   clawsystem.check_can_sequence(sonarsystem);
   // //   clawsystem.dispose_can_sequence();
   // // }
-  if (!found_tape) {
-    drivesystem.forward_slow();
-    display.setCursor(0, 0);
-    display.print("NOT FOUND TAPE");
-  } else {
-    display.setCursor(0, 0);
-    display.print("TAPE FOLLOWING");
-    follow_tape();
-  }
+  // if (!found_tape) {
+  //   display.setCursor(0, 0);
+  //   display.print("NOT FOUND TAPE");
+  //   drivesystem.forward_slow();
+  // } else {
+  //   display.setCursor(0, 0);
+  //   display.print("TAPE FOLLOWING");
+  //   follow_tape();
+  // }
 
-  left_prev = left_ontape;
-  right_prev = right_ontape;
+  // left_prev = left_ontape;
+  // right_prev = right_ontape;
   display.display();
   // delay(50);
 }
@@ -353,7 +351,7 @@ void follow_tape() {
   left_list[0] = left_ontape;
   right_list[0] = right_ontape;
 
-  if ((left_ontape && right_ontape) || off_tape_turn_lot_num >= 50) {
+  if ((left_ontape && right_ontape) || off_tape_turn_lot_num >= OFFTAPELOTMAX) {
     // slowly go forward
     off_tape_turn_lot_num = 0;
     drivesystem.forward_med();
@@ -389,4 +387,39 @@ void follow_tape() {
       }
     }
   }
+}
+
+
+
+//// TEST FUNCTIONS
+
+void speedTest(String side) {
+  if (side == "l") {
+    drivesystem.update(0, 37);
+    delay(ROTATE90TIME);
+    drivesystem.update(0, 39);
+    delay(ROTATE90TIME);
+    drivesystem.update(0, 41);
+    delay(ROTATE90TIME);
+    drivesystem.update(0, 43);
+  } else {
+    drivesystem.update(37, 0);
+    delay(ROTATE90TIME);
+    drivesystem.update(39, 0);
+    delay(ROTATE90TIME);
+    drivesystem.update(41, 0);
+    delay(ROTATE90TIME);
+    drivesystem.update(43, 0);
+  }
+  
+}
+
+void rotateTest(String direction) {
+  if (direction == "l") {
+    drivesystem.rotate_left();
+  } else {
+    drivesystem.rotate_right();
+  }
+  delay(ROTATE90TIME);
+  drivesystem.stop(5000);
 }
