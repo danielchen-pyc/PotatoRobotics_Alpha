@@ -60,7 +60,8 @@ SonarSystem sonarsystem(TRIGGER_PIN_LEFT, ECHO_PIN_LEFT,  TRIGGER_PIN_FRONT, ECH
 #define MOTOR_RIGHT_FORWARD PA_3
 #define MOTOR_RIGHT_REVERSE PA_7
 DriveSystem drivesystem(MOTOR_LEFT_FORWARD, MOTOR_LEFT_REVERSE, MOTOR_RIGHT_FORWARD, MOTOR_RIGHT_REVERSE, PWM_FREQ);
-#define ROTATE90TIME 620
+#define ROTATELEFT90TIME 620
+#define ROTATERIGHT90TIME 800
 
 // CLAW SYSTEM
 #define ARM_PIN PB8
@@ -95,7 +96,7 @@ void setup() {
   // drivesystem.init();
   // drivesystem.forward_slow();
   delay(5000);
-  rotateTest("l");
+  rotateTest("r");
   
   
 
@@ -396,19 +397,19 @@ void follow_tape() {
 void speedTest(String side) {
   if (side == "l") {
     drivesystem.update(0, 37);
-    delay(ROTATE90TIME);
+    delay(2000);
     drivesystem.update(0, 39);
-    delay(ROTATE90TIME);
+    delay(2000);
     drivesystem.update(0, 41);
-    delay(ROTATE90TIME);
+    delay(2000);
     drivesystem.update(0, 43);
   } else {
     drivesystem.update(37, 0);
-    delay(ROTATE90TIME);
+    delay(2000);
     drivesystem.update(39, 0);
-    delay(ROTATE90TIME);
+    delay(2000);
     drivesystem.update(41, 0);
-    delay(ROTATE90TIME);
+    delay(2000);
     drivesystem.update(43, 0);
   }
   
@@ -417,9 +418,10 @@ void speedTest(String side) {
 void rotateTest(String direction) {
   if (direction == "l") {
     drivesystem.rotate_left();
+    delay(ROTATELEFT90TIME);
   } else {
     drivesystem.rotate_right();
+    delay(ROTATERIGHT90TIME);
   }
-  delay(ROTATE90TIME);
   drivesystem.stop(5000);
 }
