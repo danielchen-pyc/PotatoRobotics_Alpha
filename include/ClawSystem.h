@@ -22,6 +22,7 @@ public:
     ClawSystem(int arm_pin, int claw_pin);
     virtual ~ClawSystem();
     void init();
+    void disconnect();
     void disconnect_arm();
     void open_claw();
     void close_claw();

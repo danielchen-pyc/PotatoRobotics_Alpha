@@ -47,8 +47,7 @@ void DriveSystem::update(int left_speed, int right_speed) {
 }
 
 void DriveSystem::stop(int duration) {
-    this->Right.init();
-    this->Left.init();
+    this->update(0, 0);
     delay(duration);
 }
 

@@ -13,6 +13,8 @@ ClawSystem::ClawSystem(int arm_pin, int claw_pin): arm_pin(arm_pin), claw_pin(cl
     // delay(1000);
     // this->close_claw();
     // delay(1000);
+    pinMode(this->arm_pin, OUTPUT);
+    pinMode(this->claw_pin, OUTPUT);  
 }
 
 ClawSystem::~ClawSystem() {
@@ -20,29 +22,38 @@ ClawSystem::~ClawSystem() {
 }
 
 void ClawSystem::init() {
-    pinMode(this->arm_pin, OUTPUT);
-    pinMode(this->claw_pin, OUTPUT);  
     this->arm_servo.attach(this->arm_pin);
     this->claw_servo.attach(this->claw_pin);  
+}
+
+void ClawSystem::disconnect() {
+    this->claw_servo.detach();
+    this->arm_servo.detach();
 }
 
 void ClawSystem::disconnect_arm() {
     this->arm_servo.detach();
 }
 
+
+
 void ClawSystem::open_claw() {
+    this->claw_servo.attach(this->claw_pin);  
+    delay(200);
     for (int servoPos = 90; servoPos >= 59; servoPos--) {
         this->claw_servo.write(servoPos);
-        delay(30);
+        delay(31);
     }
     for (int servoPos2 = 59; servoPos2 <= 90; servoPos2++) {
         this->claw_servo.write(servoPos2);
-        delay(30);
+        delay(31);
     }
     this->currentPos = "open";
 }
 
 void ClawSystem::grab() {
+    this->claw_servo.attach(this->claw_pin);  
+    delay(200);
     for (int clawPos = 90; clawPos <= 128; clawPos++) {
         this->claw_servo.write(clawPos);
         delay(30);
@@ -70,6 +81,9 @@ void ClawSystem::close_claw() {
 void ClawSystem::dispose_can_sequence() {
     this->raise_arm();
     this->open_claw();
+    this->grab();
+    // delay(500);
+    // this->disconnect_arm();
 }
 
 void ClawSystem::check_can_sequence(SonarSystem &sonarsystem) {
@@ -97,17 +111,22 @@ void ClawSystem::rest_arm() {
 }
 
 void ClawSystem::lower_arm() {
+    this->arm_servo.attach(arm_pin);
+    delay(100); 
     for (int clawPos = 90; clawPos >= 79; clawPos--) {
         this->arm_servo.write(clawPos);
-        delay(24);
+        delay(25);
     }
     for (int clawPos = 79; clawPos <= 90; clawPos++) {
         this->arm_servo.write(clawPos);
-        delay(24);
+        delay(25);
     }
+    this->arm_servo.detach();
 }
 
 void ClawSystem::raise_arm() {
+    this->arm_servo.attach(arm_pin);
+    delay(200); 
     for (int clawPos = 90; clawPos <= 108; clawPos++) {
         this->arm_servo.write(clawPos);
         delay(27);
@@ -116,6 +135,7 @@ void ClawSystem::raise_arm() {
         this->arm_servo.write(clawPos);
         delay(27);
     }
+    this->arm_servo.detach();
 }
 
 void ClawSystem::raise_arm(int final_pos) {
