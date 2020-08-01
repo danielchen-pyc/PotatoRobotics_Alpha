@@ -42,13 +42,14 @@ void ClawSystem::open_claw() {
     delay(200);
     for (int servoPos = 90; servoPos >= 59; servoPos--) {
         this->claw_servo.write(servoPos);
-        delay(31);
+        delay(33);
     }
     for (int servoPos2 = 59; servoPos2 <= 90; servoPos2++) {
         this->claw_servo.write(servoPos2);
-        delay(31);
+        delay(32);
     }
     this->currentPos = "open";
+    this->claw_servo.detach();
 }
 
 void ClawSystem::grab() {
@@ -56,13 +57,14 @@ void ClawSystem::grab() {
     delay(200);
     for (int clawPos = 90; clawPos <= 128; clawPos++) {
         this->claw_servo.write(clawPos);
-        delay(30);
+        delay(31);
     }
     for (int clawPos = 128; clawPos >= 90; clawPos--) {
         this->claw_servo.write(clawPos);
-        delay(30);
+        delay(31);
     }
     this->currentPos = "close";
+    this->claw_servo.detach();
 }
 
 void ClawSystem::grab_can_sequence() {

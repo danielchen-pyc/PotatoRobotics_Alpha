@@ -1,7 +1,8 @@
 #include "DriveSystem.h"
 
 #define FAST 100
-#define MEDIUM 42.6
+#define MEDIUM 78
+// #define MEDIUM 42.6
 #define SLOW 40.3
 #define A_BIT 2.5
 #define MORE 3.5
