@@ -57,7 +57,7 @@ void ClawSystem::grab() {
     delay(200);
     for (int clawPos = 90; clawPos <= 128; clawPos++) {
         this->claw_servo.write(clawPos);
-        delay(31);
+        delay(31.5);
     }
     for (int clawPos = 128; clawPos >= 90; clawPos--) {
         this->claw_servo.write(clawPos);
@@ -74,11 +74,10 @@ void ClawSystem::grab_can_sequence() {
     delay(1000);
     this->grab();
     delay(1000);
+    this->raise_arm();
+    delay(1000);
 }
 
-void ClawSystem::close_claw() {
-    this->claw_servo.write(CLOSING_POS);
-}
 
 void ClawSystem::dispose_can_sequence() {
     this->raise_arm();
@@ -89,9 +88,9 @@ void ClawSystem::dispose_can_sequence() {
 }
 
 void ClawSystem::check_can_sequence(SonarSystem &sonarsystem) {
-    // this->raise_arm(CHECK_ARM_POS);
+    delay(300);
     // this->arm_servo.detach();
-    if (sonarsystem.getFrontDistance() < 15) {
+    if (sonarsystem.getFrontDistance() < 10) {
         // didn't successfully grabbed can -> regrab it
         this->open_claw();
         delay(1000);

@@ -25,7 +25,6 @@ public:
     void disconnect();
     void disconnect_arm();
     void open_claw();
-    void close_claw();
     void grab();
     void grab_can_sequence();
     void dispose_can_sequence();

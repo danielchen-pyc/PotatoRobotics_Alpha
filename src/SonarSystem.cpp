@@ -6,7 +6,6 @@ SonarSystem::SonarSystem(int left_trigger, int left_echo, int front_trigger, int
     SonarSystem::sonar_left = new NewPing(left_trigger, left_echo, MAX_DISTANCE);
     SonarSystem::sonar_front = new NewPing(front_trigger, front_echo, MAX_DISTANCE);
     SonarSystem::sonar_right = new NewPing(right_trigger, right_echo, MAX_DISTANCE);
-    // init(sonar_left, sonar_front, sonar_right) ;
 }
 
 SonarSystem::~SonarSystem() {
