@@ -3,13 +3,13 @@
 #define FAST 100
 #define MEDIUM 41
 // #define MEDIUM 42.6
-#define SLOW 39
+#define SLOW 38.5
 // #define SLOW 78
 #define A_BIT 2.5
 #define MORE 3.5
 #define A_LOT 4
 #define SLOW_FACTOR 0.15
-#define ROTATE_SPEED 77
+#define ROTATE_SPEED 38
 
 
 // #define MEDIUM 26

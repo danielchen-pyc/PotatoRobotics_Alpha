@@ -1,6 +1,6 @@
 #include "SonarSystem.h"
 
-#define MAX_DISTANCE 200
+#define MAX_DISTANCE 500
 
 SonarSystem::SonarSystem(int left_trigger, int left_echo, int front_trigger, int front_echo, int right_trigger, int right_echo) {
     SonarSystem::sonar_left = new NewPing(left_trigger, left_echo, MAX_DISTANCE);
