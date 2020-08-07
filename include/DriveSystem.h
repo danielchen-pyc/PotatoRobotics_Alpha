@@ -36,6 +36,8 @@ public:
 
     void rotate_left();
     void rotate_right();
+    void rotate_left_fast();
+    void rotate_right_fast();
 
     void reverse();
     void escapeCorner();

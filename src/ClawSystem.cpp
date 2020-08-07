@@ -69,11 +69,9 @@ void ClawSystem::grab() {
 
 void ClawSystem::grab_can_sequence() {
     this->open_claw();
-    delay(1000);
     this->lower_arm();
-    delay(1000);
     this->grab();
-    delay(1000);
+    delay(100);
 }
 
 
@@ -114,11 +112,11 @@ void ClawSystem::lower_arm() {
     delay(100); 
     for (int clawPos = 90; clawPos >= 79; clawPos--) {
         this->arm_servo.write(clawPos);
-        delay(26);
+        delay(28);
     }
     for (int clawPos = 79; clawPos <= 90; clawPos++) {
         this->arm_servo.write(clawPos);
-        delay(26);
+        delay(28);
     }
     this->arm_servo.detach();
 }
@@ -128,7 +126,7 @@ void ClawSystem::raise_arm() {
     delay(200); 
     for (int clawPos = 90; clawPos <= 108; clawPos++) {
         this->arm_servo.write(clawPos);
-        delay(31);
+        delay(32);
     }
     for (int clawPos = 108; clawPos >= 90; clawPos--) {
         this->arm_servo.write(clawPos);

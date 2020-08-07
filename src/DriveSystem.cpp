@@ -1,15 +1,15 @@
 #include "DriveSystem.h"
 
-#define FAST 100
-#define MEDIUM 41
+#define FAST 80
+#define MEDIUM 41.5
 // #define MEDIUM 42.6
-#define SLOW 38.5
+#define SLOW 39
 // #define SLOW 78
-#define A_BIT 2.5
-#define MORE 3.5
-#define A_LOT 4
+#define A_BIT 2.75
+#define MORE 3.75
+#define A_LOT 4.75
 #define SLOW_FACTOR 0.15
-#define ROTATE_SPEED 38
+#define ROTATE_SPEED 41.5
 
 
 // #define MEDIUM 26
@@ -107,6 +107,14 @@ void DriveSystem::rotate_left() {
 
 void DriveSystem::rotate_right() {
     this->update(ROTATE_SPEED, 0);
+}
+
+void DriveSystem::rotate_left_fast() {
+    this->update(0, FAST);
+}
+
+void DriveSystem::rotate_right_fast() {
+    this->update(FAST, 0);
 }
 
 void DriveSystem::reverse() {
